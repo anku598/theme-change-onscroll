@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div data-scroll-container id="main-container">
     <Header />
     <ChangeAbleTheme />
+    <Gallery />
     <Footer />
   </div>
 </template>
@@ -52,10 +53,14 @@ $bg: green;
   margin: 0;
 }
 
+#main-container {
+  overflow-x: hidden;
+}
+
 body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   position: relative;
   color: #000;
   text-rendering: optimizeSpeed;
