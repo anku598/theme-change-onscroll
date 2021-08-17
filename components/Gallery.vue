@@ -2,8 +2,8 @@
   <section class="section-wrapper gallery-wrap">
     <div class="gallery" ref="width">
       <div class="gallery-counter">
-        <span></span>
-        <span class="divider" />
+        <!-- <span></span>
+        <span class="divider" /> -->
         <!-- <span>{{ images.length }}</span> -->
       </div>
       <div v-for="(image, idx) in images" :key="'imgss' + idx">
@@ -21,7 +21,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default {
   data() {
     return {
-      index: 0,
+      currentIndex: 0,
       activeSection: null,
       images: [
         {
@@ -62,9 +62,11 @@ export default {
 
   methods: {
     horizontalScroll() {
-      setTimeout(() => {
-        let sections = gsap.utils.toArray(".gallery-item-wrapper");
-        gsap.to(sections, {
+      let sections = gsap.utils.toArray(".gallery-item-wrapper");
+      let tl = gsap.timeline({});
+      tl.to(
+        sections,
+        {
           xPercent: -100 * (sections.length - 1),
           ease: "none",
           scrollTrigger: {
@@ -74,21 +76,46 @@ export default {
             pin: true,
             scrub: 0.8,
             snap: 1 / (sections.length - 1),
-            end: () => `+=${this.$refs.width.offsetWidth}`,
-            onUpdate: () => {
-              console.log(sections);
-            }
+            end: () => `+=${this.$refs.width.offsetWidth}`
           }
+        },
+        0
+      );
+
+      ScrollTrigger.refresh();
+    },
+
+    changeTheme() {
+      let sections = this.$el.querySelectorAll(".gallery-item-wrapper");
+
+      sections.forEach((elem, index) => {
+        let tl = gsap.timeline({});
+        let SlideImage = elem.querySelector(".gallery-item-image");
+
+        let fadeInBottom = tl.from(SlideImage, {
+          duration: 1,
+          scale: 0.6,
+          opacity: 0.5,
+          ease: "expo.out"
         });
 
-        ScrollTrigger.refresh();
-      }, []);
+        const controller = new ScrollMagic.Controller({ vertical: false });
+        const scene = new ScrollMagic.Scene({
+          triggerElement: elem,
+          offset: 30,
+          reverse: true
+        })
+          .setClassToggle(".gallery-wrap", `in-view-color${index}`)
+          .setTween(fadeInBottom)
+          .addTo(controller);
+      });
     }
   },
 
   mounted() {
     let sections = gsap.utils.toArray(".gallery-item-wrapper");
     this.horizontalScroll();
+    this.changeTheme();
   }
 };
 </script>
@@ -99,8 +126,24 @@ section {
 }
 .gallery-wrap {
   background-color: #d53f41;
+  transition: background 0.8s;
   // margin-left: -5vw;
   // margin-right: -5vw;
+}
+
+.in-view-color1 {
+  background: #361418;
+  transition: background 0.8s;
+}
+
+.in-view-color2 {
+  background: #68ff11;
+  transition: background 0.8s;
+}
+
+.in-view-color3 {
+  background: #732bf8;
+  transition: background 0.8s;
 }
 
 .gallery-counter {

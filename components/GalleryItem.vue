@@ -35,7 +35,6 @@ export default {
   display: grid;
   grid-template-columns: 20vw 1fr 200px;
   width: 100vw;
-
   &.is-reveal {
     .gallery-item-image {
       transform: scale(1);
@@ -94,8 +93,9 @@ export default {
   width: 100%;
   height: 100%;
   will-change: transform;
-  transform: scale(0.7);
-  transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+
+  // transform: scale(0.7);
+  // transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
   filter: grayscale(100%) sepia(20%) brightness(80%);
 }
 </style>
